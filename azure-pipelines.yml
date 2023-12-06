@@ -1,34 +1,4 @@
-# Docker
-- task: DockerCompose@0
+- task: PublishSymbols@2
   inputs:
-    containerregistrytype: 'Container Registry'
-    dockerComposeFile: 'docker-compose.dev.yml'
-    action: 'Run a Docker Compose command'
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
-trigger:
-- main
-
-resources:
-- repo: self
-
-variables:
-  tag: '$(Build.BuildId)'
-
-stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/dev/Dockerfile'
-        tags: |
-          $(tag)
+    SearchPattern: '**/bin/**/*.pdb'
+    SymbolServerType: 'TeamServices'
